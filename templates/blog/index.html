@@ -1,0 +1,54 @@
+{% extends 'snippets/navbar_base.html' %} 
+
+
+{% block content %}
+
+<div class="container">
+    <!-- 질문하기(버튼) -->
+    <a href="{% url 'blog:create_question' %}" class="btn btn-warning mx-3 shadow" style="float:right;">질문하기</a>
+    
+    <!-- 글목록 -->
+    <p class="fs-3 mt-4 mx-3"> 글 목록 </p>
+    {% for question in page_obj %} 
+    <div class="card m-3">
+        <div class="card-body shadow">
+        <p class="fs-4">
+            <a href="{% url 'blog:detail' question.id %}"> 
+                {{question.subject}} 
+            </a>
+        </p>
+        <p class="fs-6"> 
+            {{question.content}} 
+        </p>
+        </div>
+    </div>
+    {% endfor %}  
+</div>
+
+<!-- 페이지 -->
+<div class="container">
+    <ul class="pagination justify-content-center">
+        <!-- 이전 페이지 -->
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">이전</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">이전</a></li>
+        {% endif %}
+        <!-- 페이지 리스트 -->
+        {% for page_number in page_obj.paginator.page_range %}
+            {% if page_number == page_obj.number %}
+                <li class="page-item active" aria-current="page"><a class="page-link" href="#">{{page_number}}</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{page_number}}">{{page_number}}</a></li>
+            {% endif %}
+        {% endfor %}
+        <!-- 다음 페이지 -->
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">다음</a></li>
+        {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">다음</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}

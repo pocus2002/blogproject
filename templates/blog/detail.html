@@ -1,0 +1,61 @@
+{% extends 'snippets/navbar_base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <!-- 질문 본문 -->
+    <div class="card m-3 bg-primary bg-opacity-25">
+        <div class="card-body shadow">
+            <p class="fs-4">
+                {{question.subject}} 
+            </p>
+            <p class="fs-6"> 
+                {{question.content}} 
+            </p>
+        </div>
+    </div>
+
+     <!-- 댓글 쓰기 -->
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <!-- 오류표시 -->
+            {% if form.errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div>
+                        <strong>{{ field.label }}</strong>
+                        {{ field.errors }}
+                    </div>
+                    {% endif %}
+                {% endfor %}            
+            </div>
+            {% endif %}
+
+            <!-- 기존에 등록된 댓글리스트 -->
+            <ul>
+                {% if question.answer_set.all %}
+                    {% for answer in question.answer_set.all %}
+                    <li class="my-1">
+                        {{ answer.content }}
+                    </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+
+            <!-- 댓글 폼 -->
+            <div class="mb-3">
+                <lable for="content" clss="form-label">내용</lable>
+                <textarea id="content" name="content" class="form-control shadow" value="{{ form.content.value|default_if_none:'' }}" style="height: 200px"></textarea>
+            </div>
+    
+            <!-- 전송버튼 -->
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">확인</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

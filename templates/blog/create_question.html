@@ -1,0 +1,38 @@
+{% extends 'snippets/navbar_base.html' %}
+
+{% block content %}
+<div class="container">
+    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+    <form method="post">
+        {% csrf_token %}
+        <!-- 오류표시 -->
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field in form %}
+                {% if field.errors %}
+                <div>
+                    <strong>{{ field.label }}</strong>
+                    {{ field.errors }}
+                </div>
+                {% endif %}
+            {% endfor %}            
+        </div>
+        {% endif %}
+
+        <!-- 질문폼 -->
+        <div class="mb-3">
+            <lable for="subject" clss="form-label">제목</lable>
+            <input type="text" id="subject" name="subject" class="form-control shadow" value="{{ form.subject.value|default_if_none:'' }}">
+        </div>
+        <div class="mb-3">
+            <lable for="content" clss="form-label">내용</lable>
+            <textarea id="content" name="content" class="form-control shadow" value="{{ form.subject.value|default_if_none:'' }}" style="height: 200px"></textarea>
+        </div>
+
+        <!-- 전송버튼 -->
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary">확인</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
